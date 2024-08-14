@@ -43,17 +43,21 @@ def main():
 
         print("\nQuiz Over")
         print(f"\nQuestions Correct: {correctQuestionCounter}\nQuestions Wrong: {wrongQuestionCounter}")
-        playAgainInput = input("\nDo you want to practice again?: Type [Y]es or [N]o \n")
-      ####### need to check if its string and not anything else  if type(playAgainInput) != str 
-        if playAgainInput.lower() == "no":
-            print("\nGoodBye!")
-            playAgain = False
-        else:
-            playAgain = True
-            acceptedOperation = False
-            wrongQuestionCounter = 0
-            correctQuestionCounter = 0 
-            totalQuestionCounter = 0
+        while True:
+            playAgainInput = input("\nDo you want to practice again?: Type [Y]es or [N]o \n")
+            if playAgainInput.lower() == "no":
+                print("\nGoodBye!")
+                playAgain = False
+                break
+            elif playAgainInput.lower() == "yes":
+                playAgain = True
+                acceptedOperation = False
+                wrongQuestionCounter = 0
+                correctQuestionCounter = 0
+                totalQuestionCounter = 0
+                break
+            else:
+                print("\nInvalid input! Please enter yes or no")
 
 
 def addition(num1, num2):
@@ -72,7 +76,7 @@ def multiplication(num1, num2):
 
 def division(num1, num2):
     quotient = int(num1) / int(num2)
-    return quotient
+    return round(quotient, 1)
 
 def questionGenerator(num1, num2, sign, callback):
     global wrongQuestionCounter, correctQuestionCounter, totalQuestionCounter
@@ -80,7 +84,7 @@ def questionGenerator(num1, num2, sign, callback):
 
     while True:  # Loop until a valid integer is entered
         try:
-            currentUserAnswer = int(input(f"\n {num1} {sign} {num2} = "))
+            currentUserAnswer = float(input(f"\n {num1} {sign} {num2} = "))
             break  # Exit the loop if input is valid
         except ValueError:
             print("Invalid input! Please enter a number.")
