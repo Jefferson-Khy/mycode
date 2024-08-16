@@ -28,11 +28,11 @@ def main():
     os.chdir("/home/student/mycode/")
 
     # copy the fileA to fileB
-    shutil.copy("5g_research/sdn_network.txt", "5g_research/sdn_network.txt.copy")
+    shutil.copy("challenge49.py", "challenge49-copy.py")
 
     # copy the entire directoryA to directoryB
-    os.system("rm -rf /home/student/mycode/5g_research_backup/")
-    shutil.copytree("5g_research/", "5g_research_backup/")
+   # os.system("rm -rf /home/student/mycode/5g_research_backup/")
+    #shutil.copytree("5g_research/", "5g_research_backup/")
 
 if __name__ == "__main__":
     main()

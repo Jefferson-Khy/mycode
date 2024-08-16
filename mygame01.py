@@ -31,7 +31,9 @@ def showStatus():
 
 # an inventory, which is initially empty
 inventory = []
-
+totalPlayerMoves = 0
+poisonCounter = 0
+pickedUpPoison = False
 ## A dictionary linking a room to other rooms
 rooms = {
 
@@ -39,6 +41,7 @@ rooms = {
                   'south' : 'Kitchen',
                   'east'  : 'Dining Room',
                   'north' : 'Living Space',
+                  'west'  : 'Pool',
                   'item'  : 'key'
                 },
 
@@ -49,15 +52,35 @@ rooms = {
             'Dining Room' : {
                   'west' : 'Hall',
                   'south': 'Garden',
-                  'item' : 'potion'
+                  'east' : 'Room1',
+                  'item' : 'potion',
+                  'description' : 'The dining table is fully set and every plate has food, but it seems noone is here. You may go East or West from here.'
                },
+            'Room1' : {
+                  'west' : 'Dining Room',
+                  'east' : 'Bathroom',
+                  'item' : 'plate',
+                  'description' : 'This room is empty except for a bottle of Dr Pepper on the floor. You may go East or West from here.'
+                },
+            'Bathroom' : {
+                'west'  : 'Room1',
+                'item'  : 'pills',
+                'description' : 'This sink and shower are left running, the lights dont work. You may go  West from here.'
+                },
             'Garden' : {
                   'north' : 'Dining Room'
-            },
-            'Living Space' : {
-                'south' : 'Hall',
-                'item'  : 'flashlight'
-            }
+                },
+            'Pool' : {
+                'east' : 'Hall',
+                'south': 'Basement',
+                'item' : 'coin',
+                'description' : 'The water is murky and you can not see to the bottom. You may go East or South  from here.'
+                },
+            'Basement' : {
+                'north': 'Pool',
+                'item' : 'skull',
+                'description' : 'Its dark and cold in here, nothing interesting it seems. You may go North from here.'
+                }
          }
 
 # start the player in the Hall
@@ -86,9 +109,31 @@ while True:
         if move[1] in rooms[currentRoom]:
             #set the current room to the new room
             currentRoom = rooms[currentRoom][move[1]]
+            totalPlayerMoves += 1
+            if pickedUpPoison:
+                if poisonCounter > 0:
+                    poisonCounter -= 1
+                    print("Find the potion", poisonCounter, "moves left.")
+                elif poisonCounter == 0 and ('potion' in rooms['Dining Room'].values() or 'potion' in inventory):
+                    print('The light is fading...Game Over!')
+                    break
         # if they aren't allowed to go that way:
         else:
             print('You can\'t go that way!')
+
+    if move[0] == 'take':
+        if move[1] in inventory and move[1] == "pills":
+            print('You start to feel drowzy.....find the potion fast.')
+            inventory.remove(move[1])
+            poisonCounter = 2
+            pickedUpPoison = True
+            print('Find the potion', poisonCounter, 'moves left.')
+        elif move[1] in inventory and move[1] == "potion":
+            print('You feel better')
+            inventory.remove(move[1])
+            poisonCounter = 0
+            pickedUpPoison = False
+            print('That was close.')
 
     #if they type 'get' first
     if move[0] == 'get' :
